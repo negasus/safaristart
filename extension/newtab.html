@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Новая вкладка</title>
+  <link rel="stylesheet" href="css/newtab.css">
+</head>
+<body>
+  <header class="toolbar">
+    <label class="search">
+      <svg class="search-icon" viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg>
+      <input id="search" type="search" placeholder="Найти ярлык" autocomplete="off" spellcheck="false" aria-label="Найти ярлык">
+      <kbd class="search-hint" aria-hidden="true">/</kbd>
+    </label>
+    <div class="toolbar-actions">
+      <button type="button" class="btn edit-only" data-action="add-group">Добавить группу</button>
+      <button type="button" class="btn edit-only" data-action="add-break">Добавить разрыв</button>
+      <button type="button" class="btn btn-primary" data-action="toggle-edit" aria-pressed="false">Правка</button>
+    </div>
+  </header>
+
+  <main id="board" class="board" aria-live="polite"></main>
+
+  <dialog id="editor" class="editor">
+    <form method="dialog" class="editor-form">
+      <h2 class="editor-title"></h2>
+      <div class="editor-fields"></div>
+      <div class="editor-actions">
+        <button type="button" class="btn" value="cancel" data-editor-cancel>Отмена</button>
+        <button type="submit" class="btn btn-primary" value="ok"></button>
+      </div>
+    </form>
+  </dialog>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
