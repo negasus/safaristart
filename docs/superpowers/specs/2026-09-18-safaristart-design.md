@@ -45,13 +45,14 @@ docs/superpowers/specs/2026-09-18-safaristart-design.md   этот дизайн 
   "version": 1,
   "items": [
     { "type": "group", "id": "g1", "title": "Работа", "color": "blue",
-      "width": "m", "collapsed": false,
+      "width": "m", "view": "chips", "collapsed": false,
       "links": [ { "id": "l1", "title": "Gmail", "url": "https://mail.google.com" } ] },
     { "type": "break", "id": "b1", "label": "Личное" }
   ]
 }
 ```
 - `items` — упорядоченный плоский список групп и разрывов; порядок = порядок на экране.
+- `view`: `chips` (чипы в строку) | `tiles` (плитки: иконка 32px, подпись снизу), выбирается в диалоге группы.
 - `width`: `s` | `m` | `l` | `full`; `color` — ключ из фиксированной палитры (~8 цветов, каждый со светлым и тёмным вариантом).
 - `break` с пустым `label` — просто перенос строки, с непустым — разделитель с подписью.
 - `id` через `crypto.randomUUID()`.

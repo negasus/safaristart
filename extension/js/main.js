@@ -61,10 +61,11 @@ async function editGroup(group) {
       { name: 'title', label: 'Название', value: group?.title ?? '', required: true },
       { name: 'color', type: 'color', label: 'Цвет', value: group?.color ?? 'blue' },
       { name: 'width', type: 'width', label: 'Ширина', value: group?.width ?? 'm' },
+      { name: 'view', type: 'view', label: 'Вид ярлыков', value: group?.view ?? 'chips' },
     ],
   });
   if (!values) return;
-  const props = { title: values.title.trim(), color: values.color, width: values.width };
+  const props = { title: values.title.trim(), color: values.color, width: values.width, view: values.view };
   commit(group ? M.updateItem(state, group.id, props) : M.createGroup(state, props));
 }
 

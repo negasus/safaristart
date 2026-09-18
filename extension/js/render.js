@@ -75,7 +75,7 @@ function renderGroup(group, ui) {
   return el('section', {
     class: 'group',
     'aria-label': group.title || 'Без названия',
-    dataset: { itemId: group.id, color: group.color, width: group.width, collapsed: collapsed ? 'true' : null },
+    dataset: { itemId: group.id, color: group.color, width: group.width, view: group.view, collapsed: collapsed ? 'true' : null },
     draggable: ui.editMode ? 'true' : null,
   }, tab, body);
 }

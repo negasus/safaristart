@@ -28,6 +28,7 @@ test('createGroup appends group with defaults', () => {
   assert.equal(g.title, 'A');
   assert.equal(g.width, 'm');
   assert.equal(g.color, 'gray');
+  assert.equal(g.view, 'chips');
   assert.equal(g.collapsed, false);
   assert.deepEqual(g.links, []);
   assert.ok(g.id);
@@ -154,7 +155,7 @@ test('migrate sanitizes items', () => {
   const s = migrate({
     version: 1,
     items: [
-      { type: 'group', id: 'g', title: 'G', width: 'huge', links: [{ id: 'l', url: 'https://a.com' }, 5] },
+      { type: 'group', id: 'g', title: 'G', width: 'huge', view: 'grid', links: [{ id: 'l', url: 'https://a.com' }, 5] },
       { type: 'break', id: 'b' },
       { type: 'weird' },
     ],
@@ -162,7 +163,18 @@ test('migrate sanitizes items', () => {
   assert.equal(s.items.length, 2);
   assert.equal(s.items[0].width, 'm');
   assert.equal(s.items[0].color, 'gray');
+  assert.equal(s.items[0].view, 'chips');
   assert.equal(s.items[0].links.length, 1);
   assert.equal(s.items[0].links[0].title, 'a.com');
   assert.equal(s.items[1].label, '');
+});
+
+test('createGroup keeps tiles view', () => {
+  const s = createGroup(emptyBoard(), { title: 'T', view: 'tiles' });
+  assert.equal(s.items[0].view, 'tiles');
+});
+
+test('migrate keeps valid view', () => {
+  const s = migrate({ version: 1, items: [{ type: 'group', id: 'g', view: 'tiles', links: [] }] });
+  assert.equal(s.items[0].view, 'tiles');
 });

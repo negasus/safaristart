@@ -1,11 +1,12 @@
 // Modal form built from a field list. openEditor resolves with the values, or null on cancel.
-import { COLORS, WIDTHS } from './model.js';
+import { COLORS, VIEWS, WIDTHS } from './model.js';
 
 const COLOR_NAMES = {
   gray: 'Серый', red: 'Красный', orange: 'Оранжевый', yellow: 'Жёлтый',
   green: 'Зелёный', teal: 'Бирюзовый', blue: 'Синий', purple: 'Фиолетовый',
 };
 const WIDTH_NAMES = { s: 'Узкая', m: 'Средняя', l: 'Широкая', full: 'Во всю строку' };
+const VIEW_NAMES = { chips: 'Список', tiles: 'Плитки' };
 
 const dialog = document.getElementById('editor');
 const form = dialog.querySelector('form');
@@ -36,6 +37,7 @@ function textField(f) {
 function choiceField(f, options, names, className) {
   const set = document.createElement('fieldset');
   set.className = `field ${className}`;
+  set.style.setProperty('--choices', String(options.length));
   const legend = document.createElement('legend');
   legend.className = 'field-label';
   legend.textContent = f.label;
@@ -59,7 +61,8 @@ function choiceField(f, options, names, className) {
 
 function buildField(f) {
   if (f.type === 'color') return choiceField(f, COLORS, COLOR_NAMES, 'field-colors');
-  if (f.type === 'width') return choiceField(f, WIDTHS, WIDTH_NAMES, 'field-widths');
+  if (f.type === 'width') return choiceField(f, WIDTHS, WIDTH_NAMES, 'field-segmented');
+  if (f.type === 'view') return choiceField(f, VIEWS, VIEW_NAMES, 'field-segmented');
   return textField(f);
 }
 

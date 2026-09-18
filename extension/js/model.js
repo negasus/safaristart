@@ -2,6 +2,7 @@
 
 export const VERSION = 1;
 export const WIDTHS = ['s', 'm', 'l', 'full'];
+export const VIEWS = ['chips', 'tiles'];
 export const COLORS = ['gray', 'red', 'orange', 'yellow', 'green', 'teal', 'blue', 'purple'];
 
 const newId = () => globalThis.crypto.randomUUID();
@@ -35,6 +36,7 @@ function makeGroup(props) {
     title: typeof props.title === 'string' ? props.title : '',
     color: COLORS.includes(props.color) ? props.color : 'gray',
     width: WIDTHS.includes(props.width) ? props.width : 'm',
+    view: VIEWS.includes(props.view) ? props.view : 'chips',
     collapsed: props.collapsed === true,
     links: [],
   };
