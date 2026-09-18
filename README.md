@@ -13,6 +13,12 @@
 ## Сборка и установка
 
 ```sh
+make install   # тесты, сборка с нуля, перезапуск приложения — так же обновляется расширение после правок
+```
+
+Или вручную:
+
+```sh
 xcodebuild -project SafariStart/SafariStart.xcodeproj -scheme SafariStart \
   -configuration Release -derivedDataPath build -allowProvisioningUpdates build
 open build/Build/Products/Release/SafariStart.app
@@ -41,6 +47,6 @@ open build/Build/Products/Release/SafariStart.app
 ## Разработка
 
 ```sh
-npm test                                          # тесты модели
-python3 -m http.server 8765 --directory extension # страница в обычном браузере (данные в localStorage)
+make test    # тесты модели
+make serve   # страница в обычном браузере на http://localhost:8765/newtab.html (данные в localStorage)
 ```
