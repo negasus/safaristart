@@ -335,12 +335,8 @@ body:not(.is-editing) .edit-only { display: none; }
 }
 
 /* Tiles view: big icon with the title underneath. */
-.group[data-view="tiles"] .links:not(.is-empty) {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
-  gap: 4px;
-}
-.group[data-view="tiles"] .chip { display: block; }
+.group[data-view="tiles"] .links { gap: 4px; }
+.group[data-view="tiles"] .chip { display: block; width: 88px; }
 .group[data-view="tiles"] .chip-link {
   flex-direction: column;
   justify-content: center;
@@ -364,14 +360,24 @@ body:not(.is-editing) .edit-only { display: none; }
   margin: 0;
 }
 
+/* Vertical separator between links. */
+.sep {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 0 5px;
+}
+.sep-line { align-self: stretch; width: 1px; margin: 7px 0; background: var(--line); }
+.group[data-view="tiles"] .sep-line { margin: 14px 0; }
+
 .group-empty { margin: 4px 6px; color: var(--muted); font-size: 13px; }
 
+.group-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
 .add-link {
   display: inline-flex;
   align-items: center;
   gap: 6px;
   height: 30px;
-  margin-top: 6px;
   padding: 0 10px 0 8px;
   border: 1px dashed var(--line);
   border-radius: 8px;
@@ -423,12 +429,17 @@ button.break-label:hover { color: var(--ink); }
   color: var(--muted);
 }
 .is-editing .chip .icon-btn:hover { color: var(--danger); }
+.is-editing .sep { gap: 2px; padding-right: 0; cursor: grab; }
+.is-editing .sep-line { width: 0; border-left: 1px dashed var(--muted); background: none; }
+.is-editing .sep .icon-btn { width: 20px; height: 20px; color: var(--muted); }
+.is-editing .sep .icon-btn:hover { color: var(--danger); }
 .is-editing .group,
 .is-editing .break { cursor: grab; }
 
 .is-dragging { opacity: 0.35; }
 
 .chip.drop-before::before,
+.sep.drop-before::before,
 .group.drop-end .links::after {
   content: "";
   align-self: stretch;
@@ -437,7 +448,8 @@ button.break-label:hover { color: var(--ink); }
   border-radius: 1px;
   background: var(--focus);
 }
-.chip.drop-before::before { position: absolute; top: 0; bottom: 0; left: -3px; margin: 4px 0; }
+.chip.drop-before::before,
+.sep.drop-before::before { position: absolute; top: 0; bottom: 0; left: -3px; margin: 4px 0; }
 .group.drop-end .links.is-empty { min-height: 32px; }
 
 .board > .drop-before { box-shadow: -6px 0 0 -3px var(--focus); }

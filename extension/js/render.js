@@ -1,5 +1,6 @@
 // State -> DOM. Full re-render; interactions are handled by delegation in main.js.
 import { iconFor } from './favicon.js';
+import { isSeparator, linkCount } from './model.js';
 
 const ICONS = {
   pencil: '<path d="M10.5 3.5l2 2L6 12H4v-2z"/>',
@@ -45,6 +46,18 @@ function renderLink(link, ui) {
   return li;
 }
 
+function renderSeparator(sep, ui) {
+  const li = el('li', {
+    class: 'sep',
+    role: 'separator',
+    'aria-orientation': 'vertical',
+    dataset: { linkId: sep.id },
+    draggable: ui.editMode ? 'true' : null,
+  }, el('span', { class: 'sep-line' }));
+  if (ui.editMode) li.append(iconButton('close', 'Удалить разделитель', 'remove-link', { linkId: sep.id }));
+  return li;
+}
+
 function renderGroup(group, ui) {
   const searching = ui.matches != null;
   const links = searching ? group.links.filter((l) => ui.matches.has(l.id)) : group.links;
@@ -59,16 +72,18 @@ function renderGroup(group, ui) {
       dataset: { action: 'toggle', groupId: group.id }, disabled: searching || null,
     },
     el('span', { class: 'tab-title' }, group.title || 'Без названия'),
-    collapsed ? el('span', { class: 'tab-count' }, String(group.links.length)) : null),
+    collapsed ? el('span', { class: 'tab-count' }, String(linkCount(group))) : null),
     ui.editMode ? iconButton('pencil', 'Изменить группу', 'edit-group', { itemId: group.id }) : null,
     ui.editMode ? iconButton('close', 'Удалить группу', 'remove-item', { itemId: group.id }) : null);
 
   const body = el('div', { class: 'group-body', id: bodyId, hidden: collapsed || null });
-  if (links.length) body.append(el('ul', { class: 'links', dataset: { groupId: group.id } }, ...links.map((l) => renderLink(l, ui))));
-  else body.append(el('ul', { class: 'links is-empty', dataset: { groupId: group.id } }));
+  const items = links.map((l) => (isSeparator(l) ? renderSeparator(l, ui) : renderLink(l, ui)));
+  body.append(el('ul', { class: `links${links.length ? '' : ' is-empty'}`, dataset: { groupId: group.id } }, ...items));
   if (ui.editMode) {
-    body.append(el('button', { type: 'button', class: 'add-link', dataset: { action: 'add-link', groupId: group.id } }, icon('plus'), 'Ярлык'));
-  } else if (!links.length) {
+    body.append(el('div', { class: 'group-actions' },
+      el('button', { type: 'button', class: 'add-link', dataset: { action: 'add-link', groupId: group.id } }, icon('plus'), 'Ярлык'),
+      el('button', { type: 'button', class: 'add-link', dataset: { action: 'add-separator', groupId: group.id } }, icon('plus'), 'Разделитель')));
+  } else if (!linkCount(group)) {
     body.append(el('p', { class: 'group-empty' }, 'Ярлыков пока нет. Нажмите «Правка», чтобы добавить.'));
   }
 

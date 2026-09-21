@@ -1,4 +1,4 @@
-// Native HTML5 drag & drop for links (between/within groups) and board items (groups, breaks).
+// Native HTML5 drag & drop for links and separators (between/within groups) and board items (groups, breaks).
 // Reports moves through callbacks; indices exclude the dragged element, matching model.moveLink/moveItem.
 
 let drag = null; // { kind: 'link' | 'item', id, el }
@@ -31,7 +31,7 @@ function linkTarget(e) {
   const group = e.target.closest('.group');
   if (!group) return null;
   const list = group.querySelector('.links');
-  const chips = [...group.querySelectorAll('.chip')].filter((c) => c !== drag.el);
+  const chips = [...group.querySelectorAll('.chip, .sep')].filter((c) => c !== drag.el);
   const index = group.dataset.collapsed ? chips.length : flowIndex(chips, e.clientX, e.clientY);
   return { groupId: group.dataset.itemId, index, before: chips[index] || null, list, group };
 }
@@ -45,7 +45,7 @@ function itemTarget(board, e) {
 export function setupDnd(board, { onMoveLink, onMoveItem }) {
   board.addEventListener('dragstart', (e) => {
     if (!board.classList.contains('is-editing')) return;
-    const chip = e.target.closest('.chip');
+    const chip = e.target.closest('.chip, .sep');
     const item = e.target.closest('.group, .break');
     const source = chip || item;
     if (!source) return;

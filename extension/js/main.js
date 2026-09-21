@@ -126,12 +126,15 @@ const actions = {
   'remove-item'(d) {
     const item = itemById(d.itemId);
     if (!item) return;
-    if (item.type === 'group' && item.links.length &&
-        !confirm(`Удалить группу «${item.title}» вместе с ярлыками (${item.links.length})?`)) return;
+    const count = item.type === 'group' ? M.linkCount(item) : 0;
+    if (count && !confirm(`Удалить группу «${item.title}» вместе с ярлыками (${count})?`)) return;
     commit(M.removeItem(state, item.id));
   },
   'add-link'(d) {
     editLink(d.groupId, null);
+  },
+  'add-separator'(d) {
+    commit(M.addSeparator(state, d.groupId, {}));
   },
   'remove-link'(d) {
     commit(M.removeLink(state, d.linkId));

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {
   emptyBoard, createGroup, updateItem, removeItem, addBreak,
   addLink, updateLink, removeLink, moveItem, moveLink, toggleCollapsed,
-  filterLinks, normalizeUrl, hostOf, migrate, findLink,
+  filterLinks, normalizeUrl, hostOf, migrate, findLink, addSeparator, isSeparator, linkCount,
 } from '../extension/js/model.js';
 
 function board() {
@@ -177,4 +177,35 @@ test('createGroup keeps tiles view', () => {
 test('migrate keeps valid view', () => {
   const s = migrate({ version: 1, items: [{ type: 'group', id: 'g', view: 'tiles', links: [] }] });
   assert.equal(s.items[0].view, 'tiles');
+});
+
+test('addSeparator inserts separator into group links', () => {
+  let s = addSeparator(board(), 'g1', { id: 's1' }, 1);
+  assert.deepEqual(linkIds(s, 'g1'), ['l1', 's1', 'l2']);
+  assert.ok(isSeparator(s.items[0].links[1]));
+  assert.equal(linkCount(s.items[0]), 2);
+  s = addSeparator(s, 'g1', { id: 's2' });
+  assert.deepEqual(linkIds(s, 'g1'), ['l1', 's1', 'l2', 's2']);
+});
+
+test('separators move and are removed like links', () => {
+  let s = addSeparator(board(), 'g1', { id: 's1' });
+  s = moveLink(s, 's1', 'g2', 0);
+  assert.deepEqual(linkIds(s, 'g1'), ['l1', 'l2']);
+  assert.deepEqual(linkIds(s, 'g2'), ['s1', 'l3']);
+  s = removeLink(s, 's1');
+  assert.deepEqual(linkIds(s, 'g2'), ['l3']);
+});
+
+test('filterLinks skips separators', () => {
+  const s = addSeparator(board(), 'g1', { id: 's1' });
+  assert.deepEqual(filterLinks(s, '').map((l) => l.id), ['l1', 'l2', 'l3']);
+});
+
+test('migrate keeps separators', () => {
+  const s = migrate({
+    version: 1,
+    items: [{ type: 'group', id: 'g', links: [{ id: 'l', url: 'https://a.com' }, { type: 'separator', id: 's' }] }],
+  });
+  assert.deepEqual(s.items[0].links, [{ id: 'l', title: 'a.com', url: 'https://a.com' }, { type: 'separator', id: 's' }]);
 });

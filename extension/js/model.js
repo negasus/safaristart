@@ -48,6 +48,19 @@ function makeLink(props) {
   return { id: props.id || newId(), title, url };
 }
 
+function makeSeparator(props) {
+  return { type: 'separator', id: props.id || newId() };
+}
+
+// A group's links list also holds vertical separators; everything else in it is a link.
+export function isSeparator(entry) {
+  return entry.type === 'separator';
+}
+
+export function linkCount(group) {
+  return group.links.filter((l) => !isSeparator(l)).length;
+}
+
 function makeBreak(props) {
   return { type: 'break', id: props.id || newId(), label: typeof props.label === 'string' ? props.label : '' };
 }
@@ -75,6 +88,11 @@ export function toggleCollapsed(state, groupId) {
 export function addLink(state, groupId, props, index) {
   const link = makeLink(props);
   return mapGroups(state, (g) => (g.id === groupId ? { ...g, links: insertAt(g.links, index, link) } : g));
+}
+
+export function addSeparator(state, groupId, props, index) {
+  const sep = makeSeparator(props);
+  return mapGroups(state, (g) => (g.id === groupId ? { ...g, links: insertAt(g.links, index, sep) } : g));
 }
 
 export function updateLink(state, linkId, patch) {
@@ -112,7 +130,7 @@ export function moveItem(state, itemId, toIndex) {
   return { ...state, items: insertAt(rest, toIndex, item) };
 }
 
-// toIndex is the position in the target group's links with the moved link already removed.
+// Also moves separators. toIndex is the position in the target group's links with the moved link already removed.
 export function moveLink(state, linkId, toGroupId, toIndex) {
   const found = findLink(state, linkId);
   const target = state.items.find((it) => it.id === toGroupId && it.type === 'group');
@@ -127,6 +145,7 @@ export function filterLinks(state, query) {
   for (const it of state.items) {
     if (it.type !== 'group') continue;
     for (const l of it.links) {
+      if (isSeparator(l)) continue;
       const hay = `${l.title} ${l.url}`.toLowerCase();
       if (tokens.every((t) => hay.includes(t))) result.push(l);
     }
@@ -158,9 +177,12 @@ export function migrate(raw) {
     if (!it || typeof it !== 'object') continue;
     if (it.type === 'group') {
       const g = makeGroup(it);
-      g.links = (Array.isArray(it.links) ? it.links : [])
-        .filter((l) => l && typeof l === 'object' && typeof l.url === 'string')
-        .map(makeLink);
+      g.links = [];
+      for (const l of Array.isArray(it.links) ? it.links : []) {
+        if (!l || typeof l !== 'object') continue;
+        if (isSeparator(l)) g.links.push(makeSeparator(l));
+        else if (typeof l.url === 'string') g.links.push(makeLink(l));
+      }
       items.push(g);
     } else if (it.type === 'break') {
       items.push(makeBreak(it));
