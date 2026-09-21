@@ -2,11 +2,11 @@
 import { COLORS, VIEWS, WIDTHS } from './model.js';
 
 const COLOR_NAMES = {
-  gray: 'Серый', red: 'Красный', orange: 'Оранжевый', yellow: 'Жёлтый',
-  green: 'Зелёный', teal: 'Бирюзовый', blue: 'Синий', purple: 'Фиолетовый',
+  gray: 'Gray', red: 'Red', orange: 'Orange', yellow: 'Yellow',
+  green: 'Green', teal: 'Teal', blue: 'Blue', purple: 'Purple',
 };
-const WIDTH_NAMES = { s: 'Узкая', m: 'Средняя', l: 'Широкая', full: 'Во всю строку' };
-const VIEW_NAMES = { chips: 'Список', tiles: 'Плитки' };
+const WIDTH_NAMES = { s: 'Narrow', m: 'Medium', l: 'Wide', full: 'Full row' };
+const VIEW_NAMES = { chips: 'List', tiles: 'Tiles' };
 
 const dialog = document.getElementById('editor');
 const form = dialog.querySelector('form');

@@ -39,7 +39,7 @@ function draw() {
   if (found && !found.some((l) => l.id === ui.selectedId)) ui.selectedId = found[0]?.id ?? null;
   if (!found) ui.selectedId = null;
   document.body.classList.toggle('is-editing', ui.editMode);
-  editToggle.textContent = ui.editMode ? 'Готово' : 'Правка';
+  editToggle.textContent = ui.editMode ? 'Done' : 'Edit';
   editToggle.setAttribute('aria-pressed', String(ui.editMode));
   render(board, state, { ...ui, matches: found ? new Set(found.map((l) => l.id)) : null });
 }
@@ -55,13 +55,13 @@ function commit(next) {
 
 async function editGroup(group) {
   const values = await openEditor({
-    title: group ? 'Группа' : 'Новая группа',
-    submitLabel: group ? 'Сохранить' : 'Создать',
+    title: group ? 'Group' : 'New group',
+    submitLabel: group ? 'Save' : 'Create',
     fields: [
-      { name: 'title', label: 'Название', value: group?.title ?? '', required: true },
-      { name: 'color', type: 'color', label: 'Цвет', value: group?.color ?? 'blue' },
-      { name: 'width', type: 'width', label: 'Ширина', value: group?.width ?? 'm' },
-      { name: 'view', type: 'view', label: 'Вид ярлыков', value: group?.view ?? 'chips' },
+      { name: 'title', label: 'Name', value: group?.title ?? '', required: true },
+      { name: 'color', type: 'color', label: 'Color', value: group?.color ?? 'blue' },
+      { name: 'width', type: 'width', label: 'Width', value: group?.width ?? 'm' },
+      { name: 'view', type: 'view', label: 'Link style', value: group?.view ?? 'chips' },
     ],
   });
   if (!values) return;
@@ -71,11 +71,11 @@ async function editGroup(group) {
 
 async function editLink(groupId, link) {
   const values = await openEditor({
-    title: link ? 'Ярлык' : 'Новый ярлык',
-    submitLabel: link ? 'Сохранить' : 'Добавить',
+    title: link ? 'Link' : 'New link',
+    submitLabel: link ? 'Save' : 'Add',
     fields: [
-      { name: 'url', label: 'Адрес', value: link?.url ?? '', placeholder: 'example.com', required: true },
-      { name: 'title', label: 'Название', value: link?.title ?? '', placeholder: 'Возьмётся из адреса' },
+      { name: 'url', label: 'URL', value: link?.url ?? '', placeholder: 'example.com', required: true },
+      { name: 'title', label: 'Name', value: link?.title ?? '', placeholder: 'Taken from the URL' },
     ],
   });
   if (!values || !values.url.trim()) return;
@@ -84,9 +84,9 @@ async function editLink(groupId, link) {
 
 async function editBreak(item) {
   const values = await openEditor({
-    title: item ? 'Разрыв' : 'Новый разрыв',
-    submitLabel: item ? 'Сохранить' : 'Добавить',
-    fields: [{ name: 'label', label: 'Подпись (можно оставить пустой)', value: item?.label ?? '' }],
+    title: item ? 'Break' : 'New break',
+    submitLabel: item ? 'Save' : 'Add',
+    fields: [{ name: 'label', label: 'Label (optional)', value: item?.label ?? '' }],
   });
   if (!values) return;
   const label = values.label.trim();
@@ -127,7 +127,7 @@ const actions = {
     const item = itemById(d.itemId);
     if (!item) return;
     const count = item.type === 'group' ? M.linkCount(item) : 0;
-    if (count && !confirm(`Удалить группу «${item.title}» вместе с ярлыками (${count})?`)) return;
+    if (count && !confirm(`Delete group “${item.title}” and its ${count === 1 ? 'link' : `${count} links`}?`)) return;
     commit(M.removeItem(state, item.id));
   },
   'add-link'(d) {

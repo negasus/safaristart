@@ -42,7 +42,7 @@ function renderLink(link, ui) {
     dataset: { linkId: link.id },
     draggable: ui.editMode ? 'true' : null,
   }, a);
-  if (ui.editMode) li.append(iconButton('close', `Удалить ярлык «${link.title}»`, 'remove-link', { linkId: link.id }));
+  if (ui.editMode) li.append(iconButton('close', `Delete link “${link.title}”`, 'remove-link', { linkId: link.id }));
   return li;
 }
 
@@ -54,7 +54,7 @@ function renderSeparator(sep, ui) {
     dataset: { linkId: sep.id },
     draggable: ui.editMode ? 'true' : null,
   }, el('span', { class: 'sep-line' }));
-  if (ui.editMode) li.append(iconButton('close', 'Удалить разделитель', 'remove-link', { linkId: sep.id }));
+  if (ui.editMode) li.append(iconButton('close', 'Delete separator', 'remove-link', { linkId: sep.id }));
   return li;
 }
 
@@ -71,25 +71,25 @@ function renderGroup(group, ui) {
       type: 'button', class: 'tab-toggle', 'aria-expanded': String(!collapsed), 'aria-controls': bodyId,
       dataset: { action: 'toggle', groupId: group.id }, disabled: searching || null,
     },
-    el('span', { class: 'tab-title' }, group.title || 'Без названия'),
+    el('span', { class: 'tab-title' }, group.title || 'Untitled'),
     collapsed ? el('span', { class: 'tab-count' }, String(linkCount(group))) : null),
-    ui.editMode ? iconButton('pencil', 'Изменить группу', 'edit-group', { itemId: group.id }) : null,
-    ui.editMode ? iconButton('close', 'Удалить группу', 'remove-item', { itemId: group.id }) : null);
+    ui.editMode ? iconButton('pencil', 'Edit group', 'edit-group', { itemId: group.id }) : null,
+    ui.editMode ? iconButton('close', 'Delete group', 'remove-item', { itemId: group.id }) : null);
 
   const body = el('div', { class: 'group-body', id: bodyId, hidden: collapsed || null });
   const items = links.map((l) => (isSeparator(l) ? renderSeparator(l, ui) : renderLink(l, ui)));
   body.append(el('ul', { class: `links${links.length ? '' : ' is-empty'}`, dataset: { groupId: group.id } }, ...items));
   if (ui.editMode) {
     body.append(el('div', { class: 'group-actions' },
-      el('button', { type: 'button', class: 'add-link', dataset: { action: 'add-link', groupId: group.id } }, icon('plus'), 'Ярлык'),
-      el('button', { type: 'button', class: 'add-link', dataset: { action: 'add-separator', groupId: group.id } }, icon('plus'), 'Разделитель')));
+      el('button', { type: 'button', class: 'add-link', dataset: { action: 'add-link', groupId: group.id } }, icon('plus'), 'Link'),
+      el('button', { type: 'button', class: 'add-link', dataset: { action: 'add-separator', groupId: group.id } }, icon('plus'), 'Separator')));
   } else if (!linkCount(group)) {
-    body.append(el('p', { class: 'group-empty' }, 'Ярлыков пока нет. Нажмите «Правка», чтобы добавить.'));
+    body.append(el('p', { class: 'group-empty' }, 'No links yet. Click Edit to add some.'));
   }
 
   return el('section', {
     class: 'group',
-    'aria-label': group.title || 'Без названия',
+    'aria-label': group.title || 'Untitled',
     dataset: { itemId: group.id, color: group.color, width: group.width, view: group.view, collapsed: collapsed ? 'true' : null },
     draggable: ui.editMode ? 'true' : null,
   }, tab, body);
@@ -99,7 +99,7 @@ function renderBreak(item, ui) {
   if (ui.matches != null) return null;
   if (!item.label && !ui.editMode) return el('div', { class: 'break', role: 'presentation', dataset: { itemId: item.id } });
   const label = ui.editMode
-    ? el('button', { type: 'button', class: 'break-label', dataset: { action: 'edit-break', itemId: item.id } }, item.label || 'Перенос строки')
+    ? el('button', { type: 'button', class: 'break-label', dataset: { action: 'edit-break', itemId: item.id } }, item.label || 'Line break')
     : el('h2', { class: 'break-label' }, item.label);
   return el('div', {
     class: `break${item.label ? ' has-label' : ''}`,
@@ -109,14 +109,14 @@ function renderBreak(item, ui) {
   ui.editMode ? el('span', { class: 'grip' }, icon('grip')) : null,
   label,
   el('span', { class: 'break-rule', 'aria-hidden': 'true' }),
-  ui.editMode ? iconButton('close', 'Удалить разрыв', 'remove-item', { itemId: item.id }) : null);
+  ui.editMode ? iconButton('close', 'Delete break', 'remove-item', { itemId: item.id }) : null);
 }
 
 function renderEmpty(ui) {
-  if (ui.matches != null) return el('p', { class: 'board-empty' }, 'Ничего не найдено.');
+  if (ui.matches != null) return el('p', { class: 'board-empty' }, 'Nothing found.');
   return el('div', { class: 'board-empty' },
-    el('p', {}, 'Здесь пока пусто. Создайте первую группу и добавьте в неё ярлыки.'),
-    el('button', { type: 'button', class: 'btn btn-primary', dataset: { action: 'add-group' } }, 'Создать группу'));
+    el('p', {}, 'Nothing here yet. Create your first group and add some links to it.'),
+    el('button', { type: 'button', class: 'btn btn-primary', dataset: { action: 'add-group' } }, 'Create group'));
 }
 
 export function render(root, state, ui) {

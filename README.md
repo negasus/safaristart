@@ -1,22 +1,22 @@
 # SafariStart
 
-Стартовая страница для Safari: ярлыки сайтов, разложенные по группам-«папкам».
-Группы можно перетаскивать, менять им цвет и ширину, сворачивать и разделять разрывами строки.
+A start page for Safari: website links organized into folder-like groups.
+Groups can be dragged around, colored, resized, collapsed, and separated with line breaks.
 
-## Устройство
+## Layout
 
-- `extension/` — Safari Web Extension (Manifest V3), обычные HTML/CSS/JS без сборки.
-  Страница новой вкладки — `newtab.html`; данные хранятся в `browser.storage.local`.
-- `SafariStart/` — Xcode-проект (macOS-приложение-обёртка). Он ссылается на файлы из `extension/`, так что копировать их не нужно.
-- `tests/` — тесты модели данных (`node --test`).
+- `extension/` — Safari Web Extension (Manifest V3), plain HTML/CSS/JS with no build step.
+  The new tab page is `newtab.html`; data is stored in `browser.storage.local`.
+- `SafariStart/` — Xcode project (the macOS wrapper app). It references the files in `extension/`, so there's no need to copy them.
+- `tests/` — data model tests (`node --test`).
 
-## Сборка и установка
+## Build and install
 
 ```sh
-make install   # тесты, сборка с нуля, перезапуск приложения — так же обновляется расширение после правок
+make install   # tests, clean build, app relaunch — also the way to update the extension after changes
 ```
 
-Или вручную:
+Or manually:
 
 ```sh
 xcodebuild -project SafariStart/SafariStart.xcodeproj -scheme SafariStart \
@@ -24,30 +24,30 @@ xcodebuild -project SafariStart/SafariStart.xcodeproj -scheme SafariStart \
 open build/Build/Products/Release/SafariStart.app
 ```
 
-Или откройте `SafariStart/SafariStart.xcodeproj` в Xcode и нажмите Run.
+Or open `SafariStart/SafariStart.xcodeproj` in Xcode and click Run.
 
-Затем в Safari:
+Then in Safari:
 
-1. **Настройки → Расширения** — включите SafariStart.
-2. **Настройки → Основные → Новые вкладки открываются с** — выберите SafariStart
-   (и, если хотите, то же самое для новых окон).
+1. **Settings → Extensions** — enable SafariStart.
+2. **Settings → General → New tabs open with** — choose SafariStart
+   (and, if you like, the same for new windows).
 
-Приложение подписано командой разработчика из проекта. Если сборка без подписи, включите
-**Разработка → Разрешить неподписанные расширения**; эту галочку придётся ставить после каждого перезапуска Safari.
+The app is signed with the development team set in the project. For an unsigned build, enable
+**Develop → Allow Unsigned Extensions**; you'll have to turn it on again after every Safari restart.
 
-## Использование
+## Usage
 
-- **Правка** включает режим редактирования: можно добавлять группы, ярлыки и разрывы, а также перетаскивать ярлыки и группы. В этом режиме клик по ярлыку открывает его редактирование, а по крестику — удаляет.
-- Клик по язычку группы сворачивает её или разворачивает.
-- Поиск: `/` или просто начните печатать на странице. Стрелки выбирают ярлык, Enter открывает его, ⌘Enter — в новой вкладке, Esc очищает поиск.
-  Когда вкладка только открылась, фокус стоит в адресной строке Safari, поэтому сначала кликните по странице.
-- Разрыв без подписи просто переносит следующую группу на новую строку, а разрыв с подписью становится заголовком раздела.
-- Кнопка «Разделитель» в группе добавляет вертикальную черту между ярлыками. Её можно перетаскивать, как ярлык, и удалить крестиком.
-- Иконки сайтов загружаются через сервис Google favicons. Для локальных адресов и в случае ошибки вместо иконки показывается буква.
+- **Edit** turns on edit mode: you can add groups, links, and breaks, and drag links and groups around. In this mode, clicking a link opens its editor, and clicking its × deletes it.
+- Clicking a group's tab collapses or expands it.
+- Search: press `/` or just start typing on the page. Arrow keys select a link, Enter opens it, ⌘Enter opens it in a new tab, Esc clears the search.
+  When a tab has just opened, focus is in Safari's address bar, so click the page first.
+- A break without a label just moves the next group to a new row; a break with a label becomes a section heading.
+- The **Separator** button in a group adds a vertical line between links. Drag it like a link, and delete it with its ×.
+- Site icons are loaded from Google's favicon service. For local addresses, or if loading fails, a letter is shown instead.
 
-## Разработка
+## Development
 
 ```sh
-make test    # тесты модели
-make serve   # страница в обычном браузере на http://localhost:8765/newtab.html (данные в localStorage)
+make test    # model tests
+make serve   # the page in a regular browser at http://localhost:8765/newtab.html (data in localStorage)
 ```

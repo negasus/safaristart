@@ -9,7 +9,7 @@ APP     := $(BUILD)/Build/Products/Release/SafariStart.app
 install: test clean build
 	-pkill -x SafariStart
 	open "$(APP)"
-	@echo "Готово. Откройте новую вкладку в Safari (старые вкладки SafariStart закройте)."
+	@echo "Done. Open a new tab in Safari (close any old SafariStart tabs)."
 
 build:
 	xcodebuild -project $(PROJECT) -scheme $(SCHEME) -configuration Release \

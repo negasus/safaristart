@@ -13,7 +13,7 @@ export function emptyBoard() {
 
 export function demoBoard() {
   let s = emptyBoard();
-  s = createGroup(s, { title: 'Избранное', color: 'blue' });
+  s = createGroup(s, { title: 'Favorites', color: 'blue' });
   const gid = s.items[0].id;
   s = addLink(s, gid, { title: 'GitHub', url: 'https://github.com' });
   s = addLink(s, gid, { title: 'Hacker News', url: 'https://news.ycombinator.com' });
