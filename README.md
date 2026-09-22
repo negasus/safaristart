@@ -38,6 +38,7 @@ The app is signed with the development team set in the project. For an unsigned 
 ## Usage
 
 - **Edit** turns on edit mode: you can add groups, links, and breaks, and drag links and groups around. In this mode, clicking a link opens its editor, and clicking its × deletes it.
+- The SafariStart button in Safari's toolbar opens the start page in the current tab. If it isn't shown, add it via **View → Customize Toolbar**.
 - Clicking a group's tab collapses or expands it.
 - Search: press `/` or just start typing on the page. Arrow keys select a link, Enter opens it, ⌘Enter opens it in a new tab, Esc clears the search.
   When a tab has just opened, focus is in Safari's address bar, so click the page first.

@@ -1,4 +1,5 @@
 {
   "extName": { "message": "SafariStart" },
-  "extDescription": { "message": "A start page with links organized into groups." }
+  "extDescription": { "message": "A start page with links organized into groups." },
+  "actionTitle": { "message": "Open SafariStart in this tab" }
 }
