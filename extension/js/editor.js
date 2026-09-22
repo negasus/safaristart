@@ -60,6 +60,7 @@ function choiceField(f, options, names, className) {
 }
 
 function buildField(f) {
+  if (f.type === 'custom') return f.render();
   if (f.type === 'color') return choiceField(f, COLORS, COLOR_NAMES, 'field-colors');
   if (f.type === 'width') return choiceField(f, WIDTHS, WIDTH_NAMES, 'field-segmented');
   if (f.type === 'view') return choiceField(f, VIEWS, VIEW_NAMES, 'field-segmented');

@@ -43,7 +43,11 @@ The app is signed with the development team set in the project. For an unsigned 
   When a tab has just opened, focus is in Safari's address bar, so click the page first.
 - A break without a label just moves the next group to a new row; a break with a label becomes a section heading.
 - The **Separator** button in a group adds a vertical line between links. Drag it like a link, and delete it with its ×.
-- Site icons are loaded from Google's favicon service. For local addresses, or if loading fails, a letter is shown instead.
+- Site icons are downloaded once and cached in extension storage. The lookup tries Google's favicon service first,
+  then the icons the site declares in its HTML, then `/favicon.ico` (local addresses skip Google). If nothing is found,
+  a letter is shown and the lookup is retried after a few days. To download an icon again, open the link's editor
+  and click **Refresh icon**. The native app extension does the downloading, because the page can't read
+  cross-origin images. When the page is opened outside Safari (`make serve`), icons come straight from Google and aren't cached.
 
 ## Development
 

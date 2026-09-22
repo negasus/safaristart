@@ -4,6 +4,7 @@ import { render } from './render.js';
 import { setupDnd } from './dnd.js';
 import { openEditor, isEditorOpen } from './editor.js';
 import { setupSearch } from './search.js';
+import { initIcons, canRefreshIcons, iconField } from './favicon.js';
 
 const board = document.getElementById('board');
 const searchInput = document.getElementById('search');
@@ -76,7 +77,8 @@ async function editLink(groupId, link) {
     fields: [
       { name: 'url', label: 'URL', value: link?.url ?? '', placeholder: 'example.com', required: true },
       { name: 'title', label: 'Name', value: link?.title ?? '', placeholder: 'Taken from the URL' },
-    ],
+      link && canRefreshIcons() ? { type: 'custom', render: () => iconField(link) } : null,
+    ].filter(Boolean),
   });
   if (!values || !values.url.trim()) return;
   commit(link ? M.updateLink(state, link.id, values) : M.addLink(state, groupId, values));
@@ -199,6 +201,7 @@ onExternalChange((raw) => {
 });
 
 (async () => {
+  await initIcons(draw);
   let raw;
   try {
     raw = await load();

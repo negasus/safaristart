@@ -550,6 +550,12 @@ button.break-label:hover { color: var(--ink); }
 .field-segmented .choice:has(input:checked) { z-index: 1; border-color: var(--ink); background: var(--ink); color: var(--page); }
 .field-segmented .choice:has(input:focus-visible) { z-index: 2; outline: 2px solid var(--focus); outline-offset: 2px; }
 
+.field-icon-row { display: flex; align-items: center; gap: 12px; }
+.field-icon-preview { display: inline-grid; place-items: center; }
+.field-icon-preview .fav { width: 32px; height: 32px; border-radius: 8px; }
+.field-icon-preview .fav-letter { font-size: 16px; }
+.field-icon-status { color: var(--muted); font-size: 12.5px; }
+
 .editor-actions { display: flex; justify-content: flex-end; gap: 8px; }
 
 @media (prefers-reduced-motion: reduce) {
